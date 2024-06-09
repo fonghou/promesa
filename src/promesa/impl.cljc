@@ -25,8 +25,9 @@
       java.util.concurrent.Future
       java.util.concurrent.TimeUnit
       java.util.concurrent.TimeoutException
-      java.util.function.Function
-      java.util.function.Supplier)))
+      java.util.function.BiConsumer
+      java.util.function.BiFunction
+      java.util.function.Function)))
 
 ;; --- Global Constants
 
@@ -35,7 +36,8 @@
 (defn promise?
   "Return true if `v` is a promise instance."
   [v]
-  (satisfies? pt/IPromise v))
+  #?(:cljs (satisfies? pt/IPromise v)
+     :clj (instance? CompletionStage v)))
 
 (defn deferred?
   "Return true if `v` is a deferred instance."
@@ -228,9 +230,8 @@
        ([it f executor]
         (.whenCompleteAsync ^CompletionStage it
                             ^BiConsumer (pu/->Consumer2 f)
-                            ^Executor (exec/resolve-executor executor))))
+                            ^Executor (exec/resolve-executor executor))))))
 
-     ))
 
 #?(:clj
    (extend-type Future
