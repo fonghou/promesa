@@ -37,12 +37,13 @@
   "Return true if `v` is a promise instance."
   [v]
   #?(:cljs (satisfies? pt/IPromise v)
-     :clj (instance? CompletionStage v)))
+     :clj (instance? CompletableFuture v)))
 
 (defn deferred?
   "Return true if `v` is a deferred instance."
   [v]
-  (satisfies? pt/ICompletable v))
+  #?(:cljs (satisfies? pt/ICompletable v)
+     :clj (instance? CompletableFuture v)))
 
 (defn resolved
   [v]
