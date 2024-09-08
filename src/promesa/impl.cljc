@@ -57,11 +57,11 @@
             (.completeExceptionally ^CompletableFuture p v)
             p)))
 
-#?(:cljs
-   (defn coerce
-     "Coerce a thenable to built-in promise impl type."
-     [v]
-     (impl/coerce v)))
+(defn coerce
+  [v]
+  (if (promise? v)
+    v
+    (resolved v)))
 
 (defn all
   [promises]
